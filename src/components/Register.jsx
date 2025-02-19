@@ -42,7 +42,7 @@ const Register = () => {
     setLoading(true); // Show loading state
 
     try {
-      const response = await fetch("http://localhost/usra-dashboard-backend/register.php", {
+      const response = await fetch("http://localhost/USRA-DASHBOARD-BACKEND/register.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password, age }),

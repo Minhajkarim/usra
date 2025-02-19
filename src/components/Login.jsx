@@ -1,44 +1,51 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for routing
+import { useNavigate } from "react-router-dom"; // React Router for navigation
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // For holding error messages
-  const navigate = useNavigate(); // React Router's navigation hook
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // Handle form submission
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault();
+    setError(""); // Clear previous errors
+    setLoading(true);
 
-    // Clear any previous errors
-    setError("");
-
-    // Check for empty fields
+    // Validation check
     if (!username || !password) {
       setError("Username and password are required.");
+      setLoading(false);
       return;
     }
 
-    // Send login request to the backend
-    const response = await fetch("http://localhost/usra-dashboard-backend/login.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Inform the backend it's receiving JSON
-      },
-      body: JSON.stringify({ username, password }), // Send data as JSON
-    });
+    try {
+      const response = await fetch("http://localhost/usra-dashboard-backend/login.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Important for CORS with cookies/sessions
+        body: JSON.stringify({ username, password }),
+      });
 
-    // Wait for the backend's response
-    const data = await response.json();
+      // ✅ Check HTTP response status before parsing JSON
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
 
-    // Handle backend response
-    if (data.success) {
-      // Navigate to the dashboard after a successful login
+      const data = await response.json();
+      console.log("Login successful:", data);
+
+      // ✅ Redirect to dashboard on success
       navigate("/dashboard");
-    } else {
-      // Set the error message if login failed
-      setError(data.message || "Login failed. Please try again.");
+    } catch (error) {
+      console.error("Login failed:", error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,24 +59,28 @@ const Login = () => {
 
         <form onSubmit={handleLogin}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+              Username
+            </label>
             <input
               type="text"
               id="username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)} // Set username state
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md"
             />
           </div>
 
           <div className="mb-6">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password
+            </label>
             <input
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} // Set password state
+              onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-4 py-2 mt-2 border border-gray-300 rounded-md"
             />
@@ -77,15 +88,20 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
+            className={`w-full py-2 rounded-md text-white ${
+              loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+            }`}
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
         <div className="mt-4 text-center">
           <span>Don't have an account? </span>
-          <a href="/register" className="text-blue-500">Register</a>
+          <a href="/register" className="text-blue-500">
+            Register
+          </a>
         </div>
       </div>
     </div>
