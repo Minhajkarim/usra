@@ -27,7 +27,7 @@ const AuthPage = () => {
             </button>
             <button 
               className="w-1/2 bg-blue-500 text-white py-2 rounded-full hover:bg-red-500"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/registeras")}
             >
               Register
             </button>

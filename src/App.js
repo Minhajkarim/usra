@@ -7,6 +7,8 @@ import Profile from "./components/Profile";
 import Settings from "./components/Settings";
 import AuthPage from "./components/AuthPage";
 import RegisterOptions from "./components/RegisterOptions";
+import ParentSignup from "./components/ParentSignup";
+import ExpertSignup from "./components/ExpertSignup";
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/registeras" element={<RegisterOptions />} />
+            <Route path="/register/parent" element={<ParentSignup />} />
+            <Route path="/register/expert" element={<ExpertSignup />} />
 
             {/* Protected Routes */}
             <Route path="/dashboard" element={<Dashboard />} />
