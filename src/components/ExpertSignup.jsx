@@ -15,11 +15,19 @@ const ExpertSignup = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-50 px-4">
+      <img src="/parent1.svg" alt="Background" className="absolute inset-0 w-full h-full object-cover" />
+      {/* Logo in the top-left corner */}
+      <img src="/logo.png" alt="Logo" className="absolute top-6 left-6 w-24" />
       {/* Increased Container Width */}
-      <div className="w-full max-w-3xl bg-white p-10 rounded-lg shadow-lg overflow-hidden relative">
+      <div className="w-full max-w-3xl p-10 rounded-lg overflow-hidden relative" style={{ backgroundImage: 'url("/yellowbg.png")', backgroundSize: "cover" }}>
         <h2 className="text-3xl font-bold text-gray-700 text-center mb-6">
           Sign Up as an Expert
         </h2>
+
+        {/* Illustration */}
+        <div className="flex justify-center mb-4">
+          <img src="/illustration2.png" alt="Illustration" className="w-42 h-auto" />
+        </div>
 
         <div className="overflow-hidden">
           <div
